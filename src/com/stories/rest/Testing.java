@@ -30,7 +30,7 @@ public class Testing {
     form.param("username", "user");
     form.param("password", "abcd");
     Response response = target.path("v1").path("register").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED), Response.class);
-    System.out.println("Form response " + response.getStatus());
+    System.out.println("Form response " + response.getHeaderString("result"));
     //System.out.println(response);
     //System.out.println(plainAnswer);
     //System.out.println(xmlAnswer);

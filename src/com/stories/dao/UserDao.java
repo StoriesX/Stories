@@ -23,19 +23,23 @@ public class UserDao {
 		return userdao;
 	}
 	
-	public boolean register(User user){
+	public int register(User user){
 		MongoCollection<Document> users = db.getCollection("users");
 		if(users.find(new Document("username", user.getUsername())) != null){
-			return false;
+			return 0;
 		}else{
 			users.insertOne(new Document("username", user.getUsername()).append("password", user.getPassword()));
-			return true;
+			return 1;
 		}
 	}
 	
-	public boolean login(User user){
+	public String login(User user){
 		MongoCollection<Document> users = db.getCollection("users");
-		return users.find(new Document("username", user.getUsername()).append("password", user.getPassword())) != null;
+		if(users.find(new Document("username", user.getUsername()).append("password", user.getPassword())) != null){
+			return "token";
+		}else{
+			return null;
+		}
 	}
 	
 	//only for testing purpose

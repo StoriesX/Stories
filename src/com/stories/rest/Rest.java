@@ -27,8 +27,7 @@ public class Rest{
 			@FormParam("firstName") String firstName, @FormParam("lastName") String lastName, 
 			@Context HttpServletResponse servletResponse) throws IOException{
 		User user = new User(username, password, firstName, lastName);
-		System.out.println(userdao.register(user)?"added a new user":"already existed");
-		
+		servletResponse.addHeader("result", String.valueOf(userdao.register(user)));
 	}
 	
 	@POST
@@ -38,7 +37,7 @@ public class Rest{
 	public void login(@FormParam("username") String username, @FormParam("password") String password,
 			@Context HttpServletResponse servletResponse) throws IOException{
 		User user = new User(username, password);
-		System.out.println(userdao.login(user)?"logged in":"cannot login");
+		servletResponse.addHeader("token", userdao.login(user));
 	}
 	
 }
