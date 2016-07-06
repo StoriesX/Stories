@@ -21,18 +21,16 @@ public class Testing {
     Client client = ClientBuilder.newClient(config);
 
     WebTarget target = client.target(getBaseURI());
-    //String response = target.path("rest").path("register").request().accept(MediaType.TEXT_PLAIN).get().toString();
+    //String response = target.path("v1").path("register").request().accept(MediaType.TEXT_PLAIN).get().toString();
 
-    //String plainAnswer = target.path("rest").path("register").request().accept(MediaType.TEXT_PLAIN).get(String.class);
-    //String xmlAnswer = target.path("rest").path("register").request().accept(MediaType.TEXT_XML).get(String.class);
-    //String htmlAnswer= target.path("rest").path("register").request().accept(MediaType.TEXT_HTML).get(String.class);
+    //String plainAnswer = target.path("v1").path("register").request().accept(MediaType.TEXT_PLAIN).get(String.class);
+    //String xmlAnswer = target.path("v1").path("register").request().accept(MediaType.TEXT_XML).get(String.class);
+    //String htmlAnswer= target.path("v1").path("register").request().accept(MediaType.TEXT_HTML).get(String.class);
     Form form =new Form();
     form.param("username", "user");
     form.param("password", "abcd");
-    Response response = target.path("rest").path("register").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED), Response.class);
+    Response response = target.path("v1").path("register").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED), Response.class);
     System.out.println("Form response " + response.getStatus());
-    
-    
     //System.out.println(response);
     //System.out.println(plainAnswer);
     //System.out.println(xmlAnswer);
@@ -40,6 +38,6 @@ public class Testing {
   }
 
   private static URI getBaseURI() {
-    return UriBuilder.fromUri("http://localhost:8080/com.stories").build();
+    return UriBuilder.fromUri("http://localhost:8080/com.stories/rest").build();
   }
 }

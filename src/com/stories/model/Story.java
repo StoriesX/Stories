@@ -1,7 +1,5 @@
 package com.stories.model;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
