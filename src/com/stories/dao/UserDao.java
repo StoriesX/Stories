@@ -25,17 +25,20 @@ public class UserDao {
 	
 	public int register(User user){
 		MongoCollection<Document> users = db.getCollection("users");
-		if(users.find(new Document("username", user.getUsername())) != null){
+		if(users.find(new Document("username", user.getUsername())).first() != null){
 			return 0;
 		}else{
-			users.insertOne(new Document("username", user.getUsername()).append("password", user.getPassword()));
+			users.insertOne(new Document("username", user.getUsername())
+					.append("password", user.getPassword())
+					.append("firstName", user.getFirstName())
+					.append("lastName", user.getLastName()));
 			return 1;
 		}
 	}
 	
 	public String login(User user){
 		MongoCollection<Document> users = db.getCollection("users");
-		if(users.find(new Document("username", user.getUsername()).append("password", user.getPassword())) != null){
+		if(users.find(new Document("username", user.getUsername()).append("password", user.getPassword())).first() != null){
 			return "token";
 		}else{
 			return null;
@@ -43,8 +46,8 @@ public class UserDao {
 	}
 	
 	//only for testing purpose
-	public boolean removeUser(User user){
+	public void removeUser(User user){
 		MongoCollection<Document> users = db.getCollection("users");
-		return users.findOneAndDelete(new Document("username", user.getUsername()).append("password", user.getPassword())) != null;
+		users.findOneAndDelete(new Document("username", user.getUsername()).append("password", user.getPassword()));
 	}
 }
