@@ -33,8 +33,14 @@ public class UserDao {
 		}
 	}
 	
+	public boolean login(User user){
+		MongoCollection<Document> users = db.getCollection("users");
+		return users.find(new Document("username", user.getUsername()).append("password", user.getPassword())) != null;
+	}
+	
+	//only for testing purpose
 	public boolean removeUser(User user){
 		MongoCollection<Document> users = db.getCollection("users");
-		return users.deleteOne(new Document("username", user.getUsername()).append("password", user.getPassword())) != null;
+		return users.findOneAndDelete(new Document("username", user.getUsername()).append("password", user.getPassword())) != null;
 	}
 }
