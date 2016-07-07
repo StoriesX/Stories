@@ -31,10 +31,13 @@ public class UserDao {
 	
 	public String authenticate(String username, String password) throws Exception{
 		MongoCollection<Document> users = db.getCollection("users");
-		if(users.find(new Document("username", username).append("password", password)).first() != null){
+		Document user = users.find(new Document("username", username).append("password", password)).first();
+		if(user != null){
 			System.out.println("user logged in: "+username);
 			Random random = new SecureRandom();
-		    return new BigInteger(130, random).toString(32);
+		    String token = new BigInteger(130, random).toString(32);
+		    users.updateOne(user, new Document("$set", new Document("token", token)));
+		    return token;
 		}else{
 			throw new WrongCredentialsException();
 		}
