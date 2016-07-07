@@ -49,4 +49,20 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public static boolean validate(String un, String pw, String fn, String ln) {
+		if(!isValidName(un)||!isValidName(fn)||!isValidName(ln)||!isValidPassword(pw)){
+			return false;
+		}
+		return true;
+	}
+
+	private static boolean isValidPassword(String pw) {
+		//add more later on
+		return pw!=null && pw.trim().length() > 0;
+	}
+
+	private static boolean isValidName(String un) {
+		return un != null && un.trim().length() > 0;
+	}
 }

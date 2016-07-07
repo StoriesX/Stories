@@ -27,10 +27,12 @@ public class Testing {
     //String xmlAnswer = target.path("v1").path("register").request().accept(MediaType.TEXT_XML).get(String.class);
     //String htmlAnswer= target.path("v1").path("register").request().accept(MediaType.TEXT_HTML).get(String.class);
     Form form =new Form();
-    form.param("username", "user");
-    form.param("password", "abcd");
-    Response response = target.path("v1").path("register").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED), Response.class);
-    System.out.println("Form response " + response.getHeaderString("result"));
+    form.param("username", "user2");
+    form.param("password", "abcde");
+    form.param("firstName", "first");
+    form.param("lastName", "last");
+    Response response = target.path("v1").path("login").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED), Response.class);
+    System.out.println("Form response " + response.toString());
     //System.out.println(response);
     //System.out.println(plainAnswer);
     //System.out.println(xmlAnswer);

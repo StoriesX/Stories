@@ -1,10 +1,16 @@
 package com.stories.dao;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
+
 import org.bson.Document;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.stories.exception.DuplicatedUserException;
+import com.stories.exception.WrongCredentialsException;
 import com.stories.model.User;
 
 public class UserDao {
@@ -23,31 +29,35 @@ public class UserDao {
 		return userdao;
 	}
 	
-	public int register(User user){
+	public String authenticate(String username, String password) throws Exception{
 		MongoCollection<Document> users = db.getCollection("users");
-		if(users.find(new Document("username", user.getUsername())).first() != null){
-			return 0;
+		if(users.find(new Document("username", username).append("password", password)).first() != null){
+			System.out.println("user logged in: "+username);
+			Random random = new SecureRandom();
+		    return new BigInteger(130, random).toString(32);
 		}else{
-			users.insertOne(new Document("username", user.getUsername())
-					.append("password", user.getPassword())
-					.append("firstName", user.getFirstName())
-					.append("lastName", user.getLastName()));
-			return 1;
+			throw new WrongCredentialsException();
 		}
 	}
 	
-	public String login(User user){
+	//only for development purpose
+	/*
+	public void removeUser(String username){
 		MongoCollection<Document> users = db.getCollection("users");
-		if(users.find(new Document("username", user.getUsername()).append("password", user.getPassword())).first() != null){
-			return "token";
+		users.deleteMany(new Document("username", username));
+	}
+	*/
+	public void register(String username, String password, String firstName, String lastName) throws Exception{
+		MongoCollection<Document> users = db.getCollection("users");
+		if(!User.validate(username, password, firstName, lastName)){
+			throw new Exception();
+		}else if(users.find(new Document("username", username)).first() != null){
+			throw new DuplicatedUserException();
 		}else{
-			return null;
-		}
+			System.out.println("created a new user: "+username);
+			users.insertOne(new Document("username", username).append("password", password)
+					.append("firstName", firstName).append("lastName", lastName));
+		}	
 	}
-	
-	//only for testing purpose
-	public void removeUser(User user){
-		MongoCollection<Document> users = db.getCollection("users");
-		users.findOneAndDelete(new Document("username", user.getUsername()).append("password", user.getPassword()));
-	}
+
 }

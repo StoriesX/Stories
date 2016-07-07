@@ -11,8 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import com.stories.model.User;
 import com.stories.dao.UserDao;
 
 @Path("/v1")
@@ -21,23 +21,38 @@ public class Rest{
 	
 	@POST
 	@Path("/register")
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void register(@FormParam("username") String username, @FormParam("password") String password, 
-			@FormParam("firstName") String firstName, @FormParam("lastName") String lastName, 
-			@Context HttpServletResponse servletResponse) throws IOException{
-		User user = new User(username, password, firstName, lastName);
-		servletResponse.addHeader("result", String.valueOf(userdao.register(user)));
+	public Response register(@FormParam("username") String username, @FormParam("password") String password, 
+			@FormParam("firstName") String firstName, @FormParam("lastName") String lastName){
+		try{
+			userdao.register(username, password, firstName, lastName);
+			return Response.ok().build();
+		}catch(Exception e){
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
 	}
 	
 	@POST
 	@Path("/login")
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void login(@FormParam("username") String username, @FormParam("password") String password,
-			@Context HttpServletResponse servletResponse) throws IOException{
-		User user = new User(username, password);
-		servletResponse.addHeader("token", userdao.login(user));
+	public Response login(@FormParam("username") String username, @FormParam("password") String password){
+		try{
+			String token = userdao.authenticate(username, password);
+			return Response.ok(token).build();
+		}catch(Exception e){
+			return Response.status(Response.Status.UNAUTHORIZED).build();
+		}
 	}
 	
+	//for development purpose
+	/* 
+	@POST
+	@Path("/delete")
+	public Response delete(@FormParam("username") String username){
+		userdao.removeUser(username);
+		return Response.ok().build();
+	}
+	*/
 }
