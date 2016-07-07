@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.stories.dao.UserDao;
+import com.stories.utils.Secured;
 
 @Path("/v1")
 public class Rest{
@@ -40,6 +41,13 @@ public class Rest{
 		}catch(Exception e){
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
+	}
+	
+	@GET
+	@Secured
+	@Path("/stories")
+	public Response getStories(){
+		return Response.ok().build();
 	}
 	
 	//for development purpose
