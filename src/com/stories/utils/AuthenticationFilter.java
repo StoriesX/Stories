@@ -22,18 +22,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-    	String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader == null) {
-            throw new NotAuthorizedException("Authorization header must be provided");
-        }
-        String token = authorizationHeader.trim();
-        String userHeader = requestContext.getHeaderString("Username");
-        if (userHeader == null) {
-            throw new NotAuthorizedException("Username header must be provided");
-        }
-        String username = userHeader.trim();
         try {
-            userdao.validate(username, token);
+            userdao.validate(requestContext.getHeaderString("Token"), requestContext.getHeaderString("Username"));
         } catch (Exception e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }

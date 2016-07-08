@@ -76,6 +76,7 @@ public class UserDao {
 				throw new NotAuthorizedException("Invalid token");
 			}
 		}
+		System.out.println(username+" is validated");
 	}
 
 }

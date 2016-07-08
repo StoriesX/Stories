@@ -37,7 +37,7 @@ public class Rest{
 	public Response login(@FormParam("username") String username, @FormParam("password") String password){
 		try{
 			String token = userdao.authenticate(username, password);
-			return Response.ok(token).build();
+			return Response.ok().header("token", token).build();
 		}catch(Exception e){
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}

@@ -26,7 +26,7 @@ public class Testing {
     Client client = ClientBuilder.newClient(config);
 
     WebTarget target = client.target(getBaseURI());
-    Response response = target.path("v1").path("stories").request().header("Username", "user2").header(HttpHeaders.AUTHORIZATION, "jhgkb5o14pqc9hj8c09427a69f").get();
+    Response response = target.path("v1").path("stories").request().header("Username", "user2").header("Token", "jhgkb5o14pqc9hj8c09427a69f").get();
     System.out.println(response.toString());
     //String plainAnswer = target.path("v1").path("register").request().accept(MediaType.TEXT_PLAIN).get(String.class);
     //String xmlAnswer = target.path("v1").path("register").request().accept(MediaType.TEXT_XML).get(String.class);
