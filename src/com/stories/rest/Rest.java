@@ -45,8 +45,8 @@ public class Rest{
 	
 	@GET
 	@Secured
-	@Path("/stories")
-	public Response getStories(){
+	@Path("/validate")
+	public Response validate(){
 		return Response.ok().build();
 	}
 	
